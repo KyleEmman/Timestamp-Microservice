@@ -32,7 +32,7 @@ var listener = app.listen(3000, function () {
 
 app.get("/api", (req, res) => {
   const currentTime = new Date()
-  const currentTimeUnix = parseInt((new Date().getTime() / 1000).toFixed(0))
+  const currentTimeUnix = parseInt((new Date().getTime()).toFixed(0))
   res.json({
     unix: currentTimeUnix,
     utc: currentTime
@@ -41,17 +41,16 @@ app.get("/api", (req, res) => {
 
 app.get("/api/:date", (req, res) => {
   const date = new Date(req.params.date)
-  // res.json({error : "Invalid Date"})
   const validUnix = moment(req.params.date, 'X', true).isValid()
   if (validUnix) {
     res.json({
-      unix: req.params.date,
-      utc: moment.unix(req.params.date).toDate().toUTCString()
+      unix: parseInt(req.params.date),
+      utc: new Date(parseInt(req.params.date)).toUTCString()
     })
   }
   else if (date.toUTCString() != "Invalid Date") {
     res.json({
-      unix: parseInt((new Date(req.params.date).getTime() / 1000).toFixed(0)),
+      unix: parseInt((new Date(req.params.date).getTime()).toFixed(0)),
       utc: date.toUTCString()
     })
   }
